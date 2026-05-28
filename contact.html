@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact - PCB Learning Hub</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+
+        /* ================= CONTACT PAGE ================= */
+
+        .contact-section{
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .contact-title{
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .contact-title h2{
+            font-size: 38px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .contact-title p{
+            color: #dcdde1;
+            font-size: 18px;
+        }
+
+        .contact-container{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        /* LEFT SIDE */
+
+        .contact-info{
+            flex: 1;
+            min-width: 320px;
+            max-width: 380px;
+            background: rgba(255,255,255,0.95);
+            color: black;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .contact-info h3{
+            color: #1e3799;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 26px;
+        }
+
+        .info-box{
+            margin-bottom: 22px;
+        }
+
+        .info-box i{
+            color: #f6b93b;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .info-box span{
+            font-weight: bold;
+            color: #1e3799;
+        }
+
+        .info-box p{
+            margin-top: 8px;
+            margin-left: 35px;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* LINKEDIN BUTTON */
+
+        .linkedin-box{
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .linkedin-btn{
+            display: inline-block;
+            text-decoration: none;
+            background: #0077b5;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-size: 17px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .linkedin-btn i{
+            margin-right: 10px;
+        }
+
+        .linkedin-btn:hover{
+            background: #005582;
+            transform: translateY(-5px);
+        }
+
+        /* SUPPORT BOX */
+
+        .support-box{
+            margin-top: 30px;
+            background: #f4f4f4;
+            padding: 18px;
+            border-radius: 15px;
+        }
+
+        .support-box h4{
+            color: #1e3799;
+            margin-bottom: 12px;
+        }
+
+        .support-box p{
+            margin: 10px 0;
+            font-size: 15px;
+        }
+
+        /* RIGHT SIDE */
+
+        .contact-form-box{
+            flex: 1;
+            min-width: 320px;
+            max-width: 650px;
+            background: rgba(255,255,255,0.95);
+            color: black;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .contact-form-box h3{
+            color: #1e3799;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 26px;
+        }
+
+        .contact-form{
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .contact-form input,
+        .contact-form textarea{
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus{
+            border-color: #1e3799;
+            box-shadow: 0px 0px 10px rgba(30,55,153,0.3);
+        }
+
+        .contact-form textarea{
+            resize: none;
+        }
+
+        .contact-form button{
+            background: #1e3799;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .contact-form button:hover{
+            background: #0c2461;
+            transform: scale(1.02);
+        }
+
+        /* STUDENT HELP */
+
+        .student-tips{
+            margin-top: 30px;
+            background: #f4f4f4;
+            border-radius: 15px;
+            padding: 18px;
+        }
+
+        .student-tips h4{
+            color: #1e3799;
+            margin-bottom: 12px;
+        }
+
+        .student-tips p{
+            margin: 10px 0;
+            font-size: 15px;
+        }
+
+        .warning{
+            margin-top: 20px;
+            text-align: center;
+            color: red;
+            font-weight: bold;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 768px){
+
+            .contact-title h2{
+                font-size: 28px;
+            }
+
+            .contact-title p{
+                font-size: 15px;
+            }
+
+            .contact-info,
+            .contact-form-box{
+                max-width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <h1>
+        <i class="fas fa-microchip"></i>
+        PCB Learning Hub
+    </h1>
+
+    <p>
+        Contact & Student Support
+    </p>
+
+</header>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <a href="web1.html">
+        <i class="fas fa-home"></i>
+        Home
+    </a>
+
+    <a href="basics.html">
+        <i class="fas fa-book"></i>
+        Basics
+    </a>
+
+    <a href="tools.html">
+        <i class="fas fa-tools"></i>
+        Tools
+    </a>
+
+    <a href="project.html">
+        <i class="fas fa-project-diagram"></i>
+        Projects
+    </a>
+
+    <a href="quiz.html">
+        <i class="fas fa-question-circle"></i>
+        Quiz
+    </a>
+
+    <a href="leaderboard.html">
+        <i class="fas fa-trophy"></i>
+        Leaderboard
+    </a>
+
+    <a href="trial.html">
+        <i class="fas fa-vr-cardboard"></i>
+        Trial Lab
+    </a>
+
+    <a href="contact.html">
+        <i class="fas fa-envelope"></i>
+        Contact
+    </a>
+
+</nav>
+
+<!-- ================= CONTACT SECTION ================= -->
+
+<section class="contact-section">
+
+    <!-- Title -->
+    <div class="contact-title">
+
+        <h2>
+            <i class="fas fa-headset"></i>
+            Get in Touch
+        </h2>
+
+        <p>
+            Ask your PCB, Embedded Systems & Electronics doubts
+        </p>
+
+    </div>
+
+    <!-- Main Container -->
+    <div class="contact-container">
+
+        <!-- LEFT SIDE -->
+        <div class="contact-info">
+
+            <h3>
+                <i class="fas fa-user-circle"></i>
+                Contact Information
+            </h3>
+
+            <div class="info-box">
+
+                <span>
+                    <i class="fas fa-user"></i>
+                    Name
+                </span>
+
+                <p>Ajay Raut</p>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </span>
+
+                <p>rautajay3061@gmail.com</p>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>
+                    <i class="fas fa-phone"></i>
+                    Phone
+                </span>
+
+                <p>+91 8767763172</p>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>
+                    <i class="fas fa-location-dot"></i>
+                    Location
+                </span>
+
+                <p>Maharashtra, India</p>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>
+                    <i class="fas fa-graduation-cap"></i>
+                    Domain
+                </span>
+
+                <p>Electronics & Telecommunication Engineering</p>
+
+            </div>
+
+            <!-- LinkedIn Button -->
+            <div class="linkedin-box">
+
+                <a href="https://www.linkedin.com/in/ajayraut3061"
+                target="_blank"
+                class="linkedin-btn">
+
+                    <i class="fab fa-linkedin"></i>
+                    Connect on LinkedIn
+
+                </a>
+
+            </div>
+
+            <!-- Support -->
+            <div class="support-box">
+
+                <h4>
+                    <i class="fas fa-circle-info"></i>
+                    Student Support
+                </h4>
+
+                <p>✔ PCB Design Guidance</p>
+
+                <p>✔ Embedded C & UART Help</p>
+
+                <p>✔ LPC2148 Project Support</p>
+
+                <p>✔ Mini & Final Year Project Ideas</p>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="contact-form-box">
+
+            <h3>
+
+                <i class="fas fa-paper-plane"></i>
+                Send Your Message
+
+            </h3>
+
+            <!-- FORM -->
+            <form class="contact-form"
+            action="mailto:rautajay3061@gmail.com"
+            method="post"
+            enctype="text/plain">
+
+                <input type="text"
+                name="name"
+                placeholder="👤 Enter Your Name"
+                required>
+
+                <input type="email"
+                name="email"
+                placeholder="📧 Enter Your Email"
+                required>
+
+                <input type="text"
+                name="subject"
+                placeholder="📘 Enter Subject">
+
+                <textarea
+                name="message"
+                rows="7"
+                placeholder="✍ Write Your PCB or Electronics Doubt..."
+                required></textarea>
+
+                <button type="submit">
+
+                    <i class="fas fa-paper-plane"></i>
+                    Send Message
+
+                </button>
+
+            </form>
+
+            <!-- Student Tips -->
+            <div class="student-tips">
+
+                <h4>
+                    <i class="fas fa-lightbulb"></i>
+                    Student Tips
+                </h4>
+
+                <p>✔ Mention your software/tool name clearly.</p>
+
+                <p>✔ Explain your issue step by step.</p>
+
+                <p>✔ Add project details if possible.</p>
+
+                <p>✔ Share screenshots for better support.</p>
+
+            </div>
+
+            <p class="warning">
+
+                ⚠ Please write electronics-related doubts clearly.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 PCB Learning Hub | Created by Ajay Raut
+    </p>
+
+    <a href="privacy.html" style="color:white;">
+
+        <i class="fas fa-shield-alt"></i>
+        Privacy Policy
+
+    </a>
+
+</footer>
+
+</body>
+</html>

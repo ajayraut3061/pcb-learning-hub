@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Lab Pro - 10 Component Dynamic Engine</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #121212;
+            --panel: #1e1e1e;
+            --accent: #27ae60;
+            --wire: #00ffcc;
+            --pcb-green: #145a32;
+            --gold: #f1c40f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow: hidden; }
+
+        .app-container { display: flex; flex-direction: column; height: 100vh; }
+        header { background: #000; padding: 10px 20px; border-bottom: 2px solid var(--accent); display: flex; justify-content: space-between; align-items: center;}
+
+        .main-layout { display: grid; grid-template-columns: 260px 1fr 380px; flex-grow: 1; overflow: hidden; background: #333; gap: 2px; }
+
+        /* Panels */
+        .panel { background: var(--panel); display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .panel-header { background: #252525; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 1px; color: #888; border-bottom: 1px solid #333; }
+
+        /* Toolbar */
+        .toolbar { padding: 10px; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex-grow: 1; }
+        .t-btn { 
+            background: #2a2a2a; border: 1px solid #444; color: white; padding: 10px; 
+            border-radius: 6px; cursor: pointer; text-align: left; transition: 0.2s; font-size: 13px;
+        }
+        .t-btn:hover { border-color: var(--accent); background: #333; }
+        .t-btn.active { background: var(--accent); border-color: #fff; }
+
+        /* Editor */
+        .editor-space { background: #151515; position: relative; cursor: crosshair; overflow: hidden; }
+        #schematic { width: 100%; height: 100%; }
+
+        /* 3D Stage */
+        .stage-3d { 
+            flex-grow: 1; display: flex; align-items: center; justify-content: center; 
+            perspective: 1200px; background: radial-gradient(#2c3e50, #000); overflow: hidden;
+        }
+        .pcb-canvas-3d {
+            width: 300px; height: 220px; background: var(--pcb-green);
+            transform-style: preserve-3d; transform: rotateX(50deg) rotateZ(-25deg);
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+            border: 2px solid #0e3d22;
+        }
+
+        /* 3D Components Styling */
+        .comp-3d { position: absolute; transform-style: preserve-3d; min-width: 8px; min-height: 8px; border-radius: 2px; }
+        .resistor-3d { background: #d35400; height: 6px; width: 20px; box-shadow: 0 3px 5px #000; }
+        .capacitor-3d { background: #3498db; height: 12px; width: 12px; border-radius: 50%; box-shadow: 0 4px 6px #000; }
+        .inductor-3d { background: #2c3e50; height: 8px; width: 16px; border: 1px solid #7f8c8d; }
+        .diode-3d { background: #111; height: 6px; width: 14px; border-right: 4px solid #bdc3c7; }
+        .led-3d { width: 10px; height: 10px; background: #e74c3c; border-radius: 50%; box-shadow: 0 0 15px #e74c3c; }
+        .ic-3d { background: #1a1a1a; border: 1px solid #333; box-shadow: 0 5px 10px #000; color: #fff; font-size: 7px; display: flex; align-items: center; justify-content: center; width: 32px; height: 24px; }
+        .transistor-3d { background: #222; width: 12px; height: 12px; border-radius: 50% 50% 0 0; border-bottom: 3px solid #7f8c8d; }
+        .switch-3d { background: #7f8c8d; width: 14px; height: 14px; border: 2px solid #d63031; }
+        .battery-3d { background: #f1c40f; width: 22px; height: 12px; border-left: 3px solid #111; }
+        .gnd-3d { background: #7f8c8d; width: 8px; height: 4px; border-radius: 0; }
+        
+        .trace-3d { position: absolute; background: var(--gold); height: 2px; opacity: 0.7; box-shadow: 0 0 2px var(--gold); transform-origin: 0 50%; }
+
+        .footer-tools { padding: 15px; border-top: 1px solid #333; }
+        .gen-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .gen-btn:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h2><i class="fas fa-microchip"></i> PCB TRIAL LAB <span style="color:var(--accent)">PRO</span></h2>
+        <div style="font-size: 12px; opacity: 0.6;">10 Component Matrix Engine v3.0</div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Tools System Matrix -->
+        <div class="panel">
+            <div class="panel-header">10-COMPONENT COMPONENT MATRIX</div>
+            <div class="toolbar">
+                <button class="t-btn" id="t-resistor" onclick="setTool('resistor')"><i class="fas fa-wave-square"></i> 1. Resistor</button>
+                <button class="t-btn" id="t-capacitor" onclick="setTool('capacitor')"><i class="fas fa-bars"></i> 2. Capacitor</button>
+                <button class="t-btn" id="t-inductor" onclick="setTool('inductor')"><i class="fas fa-ring"></i> 3. Inductor</button>
+                <button class="t-btn" id="t-diode" onclick="setTool('diode')"><i class="fas fa-play"></i> 4. Diode</button>
+                <button class="t-btn" id="t-led" onclick="setTool('led')"><i class="fas fa-lightbulb"></i> 5. LED</button>
+                <button class="t-btn" id="t-ic" onclick="setTool('ic')"><i class="fas fa-microchip"></i> 6. IC-8 Chip</button>
+                <button class="t-btn" id="t-transistor" onclick="setTool('transistor')"><i class="fas fa-code-branch"></i> 7. Transistor</button>
+                <button class="t-btn" id="t-switch" onclick="setTool('switch')"><i class="fas fa-toggle-on"></i> 8. Toggle Switch</button>
+                <button class="t-btn" id="t-battery" onclick="setTool('battery')"><i class="fas fa-battery-full"></i> 9. DC Battery</button>
+                <button class="t-btn" id="t-gnd" onclick="setTool('gnd')"><i class="fas fa-download"></i> 10. Earth Ground</button>
+                <hr style="border:0; border-top:1px solid #444; margin: 5px 0;">
+                <button class="t-btn" id="t-wire" onclick="setTool('wire')" style="color:var(--wire)"><i class="fas fa-route"></i> Wire Routing Engine</button>
+                <button class="t-btn" onclick="clearSheet()" style="color:#e74c3c"><i class="fas fa-trash"></i> Reset Canvas</button>
+            </div>
+        </div>
+
+        <!-- Schematic Canvas Workspace -->
+        <div class="panel editor-space">
+            <div class="panel-header">EESCHEMA SCHEMATIC LAB WORKSPACE</div>
+            <canvas id="schematic"></canvas>
+        </div>
+
+        <!-- Realtime Object Oriented 3D Spatial Engine -->
+        <div class="panel">
+            <div class="panel-header">REALTIME 3D ROUTING MATRIX PREVIEW</div>
+            <div class="stage-3d">
+                <div class="pcb-canvas-3d" id="pcb3d"></div>
+            </div>
+            <div class="footer-tools">
+                <button class="gen-btn" onclick="generate3D()">COMPILE & GENERATE 3D BOARD</button>
+                <p style="font-size: 10px; color:#666; margin-top:10px; text-align:center;">
+                    Right-Click anywhere inside the dark matrix workspace to cancel wire routing trails.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('schematic');
+    const ctx = canvas.getContext('2d');
+    const pcb3d = document.getElementById('pcb3d');
+    
+    let currentTool = null;
+    let components = [];
+    let wires = [];
+    let wireStart = null;
+    let mouse = { x: 0, y: 0 };
+    const GRID = 20;
+
+    function init() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        renderLoop();
+    }
+    window.addEventListener('resize', init);
+    init();
+
+    function setTool(tool) {
+        currentTool = tool;
+        wireStart = null;
+        document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+        if(tool) document.getElementById('t-' + tool).classList.add('active');
+    }
+
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = Math.round((e.clientX - rect.left) / GRID) * GRID;
+        mouse.y = Math.round((e.clientY - rect.top) / GRID) * GRID;
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+        if (!currentTool) return;
+        if (e.button === 2) return; 
+
+        if (currentTool === 'wire') {
+            if (!wireStart) {
+                wireStart = { ...mouse };
+            } else {
+                wires.push({ x1: wireStart.x, y1: wireStart.y, x2: mouse.x, y2: mouse.y });
+                wireStart = { ...mouse }; 
+            }
+        } else {
+            components.push({ type: currentTool, x: mouse.x, y: mouse.y });
+        }
+    });
+
+    canvas.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        wireStart = null;
+    });
+
+    function drawSchematic() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Matrix Render Engine Dot Grid
+        ctx.fillStyle = '#252525';
+        for(let x=0; x<canvas.width; x+=GRID) {
+            for(let y=0; y<canvas.height; y+=GRID) {
+                ctx.fillRect(x, y, 1.5, 1.5);
+            }
+        }
+
+        // Connective System Wires
+        ctx.strokeStyle = '#00ffcc';
+        ctx.lineWidth = 2.5;
+        wires.forEach(w => {
+            ctx.beginPath();
+            ctx.moveTo(w.x1, w.y1);
+            ctx.lineTo(w.x2, w.y2);
+            ctx.stroke();
+        });
+
+        // Dynamic Vector Wire Prediction
+        if (wireStart) {
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(wireStart.x, wireStart.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // Global Component Render Call
+        components.forEach(c => drawComp(c.type, c.x, c.y, 1.0));
+        if(currentTool && currentTool !== 'wire') drawComp(currentTool, mouse.x, mouse.y, 0.4);
+    }
+
+    // Schematic Vector Symbol Graphics Engine
+    function drawComp(type, x, y, alpha) {
+        ctx.globalAlpha = alpha;
+        ctx.lineWidth = 2;
+        ctx.textBaseline = "middle";
+        
+        switch(type) {
+            case 'resistor':
+                ctx.strokeStyle = '#f1c40f';
+                ctx.beginPath(); ctx.moveTo(x-20, y); ctx.lineTo(x-12, y);
+                for(let i=0; i<4; i++) ctx.lineTo(x-8+(i*4), y+(i%2?5:-5));
+                ctx.lineTo(x+12, y); ctx.lineTo(x+20, y); ctx.stroke();
+                break;
+            case 'capacitor':
+                ctx.strokeStyle = '#3498db';
+                ctx.beginPath(); ctx.moveTo(x-20, y); ctx.lineTo(x-4, y); 
+                ctx.moveTo(x+4, y); ctx.lineTo(x+20, y);
+                ctx.moveTo(x-4, y-10); ctx.lineTo(x-4, y+10);
+                ctx.moveTo(x+4, y-10); ctx.lineTo(x+4, y+10); ctx.stroke();
+                break;
+            case 'inductor':
+                ctx.strokeStyle = '#e67e22';
+                ctx.beginPath(); ctx.moveTo(x-20, y); ctx.lineTo(x-15, y);
+                for(let i=0; i<3; i++) ctx.arc(x-10+(i*10), y, 5, Math.PI, 0, true);
+                ctx.lineTo(x+20, y); ctx.stroke();
+                break;
+            case 'diode':
+                ctx.strokeStyle = '#9b59b6';
+                ctx.beginPath(); ctx.moveTo(x-20, y); ctx.lineTo(x+20, y);
+                ctx.moveTo(x-6, y-8); ctx.lineTo(x-6, y+8); ctx.lineTo(x+6, y); ctx.closePath();
+                ctx.moveTo(x+6, y-8); ctx.lineTo(x+6, y+8); ctx.stroke();
+                break;
+            case 'led':
+                ctx.strokeStyle = '#e74c3c';
+                ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI*2); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(x-4, y-4); ctx.lineTo(x+4, y+4); ctx.moveTo(x+4, y-4); ctx.lineTo(x-4, y+4); ctx.stroke();
+                break;
+            case 'ic':
+                ctx.fillStyle = '#2c3e50'; ctx.fillRect(x-20, y-15, 40, 30);
+                ctx.strokeStyle = '#fff'; ctx.strokeRect(x-20, y-15, 40, 30);
+                ctx.fillStyle = "#fff"; ctx.font = "7px monospace"; ctx.fillText("IC-8", x-8, y);
+                break;
+            case 'transistor':
+                ctx.strokeStyle = '#1abc9c';
+                ctx.beginPath(); ctx.moveTo(x-20, y); ctx.lineTo(x-5, y);
+                ctx.moveTo(x-5, y-10); ctx.lineTo(x-5, y+10);
+                ctx.moveTo(x-5, y-5); ctx.lineTo(x+10, y-12);
+                ctx.moveTo(x-5, y+5); ctx.lineTo(x+10, y+12); ctx.stroke();
+                break;
+            case 'switch':
+                ctx.strokeStyle = '#d63031';
+                ctx.beginPath(); ctx.moveTo(x-20, y); ctx.lineTo(x-10, y);
+                ctx.moveTo(x+10, y); ctx.lineTo(x+20, y);
+                ctx.moveTo(x-10, y); ctx.lineTo(x+8, y-8); ctx.stroke();
+                break;
+            case 'battery':
+                ctx.strokeStyle = '#f1c40f';
+                ctx.beginPath(); ctx.moveTo(x-20, y); ctx.lineTo(x-5, y); ctx.moveTo(x+5, y); ctx.lineTo(x+20, y);
+                ctx.moveTo(x-5, y-12); ctx.lineTo(x-5, y+12);
+                ctx.moveTo(x+5, y-6); ctx.lineTo(x+5, y+6); ctx.stroke();
+                break;
+            case 'gnd':
+                ctx.strokeStyle = '#7f8c8d';
+                ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y+8);
+                ctx.moveTo(x-10, y+8); ctx.lineTo(x+10, y+8);
+                ctx.moveTo(x-6, y+12); ctx.lineTo(x+6, y+12);
+                ctx.moveTo(x-2, y+16); ctx.lineTo(x+2, y+16); ctx.stroke();
+                break;
+        }
+        ctx.globalAlpha = 1.0;
+    }
+
+    // Dynamic Spatial Data Compiler Engine to Translate Vector Objects into 3D Solid Planes
+    function generate3D() {
+        pcb3d.innerHTML = ''; 
+        
+        const scaleX = 300 / canvas.width;
+        const scaleY = 220 / canvas.height;
+
+        // Traces compilation
+        wires.forEach(w => {
+            const dist = Math.sqrt(Math.pow(w.x2-w.x1, 2) + Math.pow(w.y2-w.y1, 2));
+            const angle = Math.atan2(w.y2-w.y1, w.x2-w.x1);
+            
+            const trace = document.createElement('div');
+            trace.className = 'trace-3d';
+            trace.style.width = (dist * scaleX) + 'px';
+            trace.style.left = (w.x1 * scaleX) + 'px';
+            trace.style.top = (w.y1 * scaleY) + 'px';
+            trace.style.transform = `rotate(${angle}rad)`;
+            pcb3d.appendChild(trace);
+        });
+
+        // Object Elements Component compilation
+        components.forEach(c => {
+            const el = document.createElement('div');
+            el.className = `comp-3d ${c.type}-3d`;
+            el.style.left = (c.x * scaleX - 6) + 'px';
+            el.style.top = (c.y * scaleY - 3) + 'px';
+            
+            if(c.type === 'ic') {
+                el.innerText = 'MCU';
+                el.style.left = (c.x * scaleX - 16) + 'px';
+                el.style.top = (c.y * scaleY - 12) + 'px';
+            }
+            pcb3d.appendChild(el);
+        });
+
+        // Matrix Sweep Kinetic Translation System
+        pcb3d.style.transform = 'rotateX(50deg) rotateZ(335deg) scale(1.1)';
+        setTimeout(() => {
+            pcb3d.style.transform = 'rotateX(50deg) rotateZ(-25deg) scale(1)';
+        }, 500);
+    }
+
+    function clearSheet() {
+        components = [];
+        wires = [];
+        pcb3d.innerHTML = '';
+        setTool(null);
+    }
+
+    function renderLoop() {
+        drawSchematic();
+        requestAnimationFrame(renderLoop);
+    }
+</script>
+
+</body>
+</html>

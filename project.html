@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>Projects - PCB Learning Hub</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+
+        /* ================= POPUP ================= */
+
+        .popup{
+
+            display:none;
+            position:fixed;
+            z-index:9999;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            overflow:auto;
+            background:rgba(0,0,0,0.8);
+
+        }
+
+        /* Popup Box */
+
+        .popup-content{
+
+            background:white;
+            color:black;
+            width:80%;
+            max-width:800px;
+            margin:50px auto;
+            padding:30px;
+            border-radius:20px;
+            position:relative;
+            animation:popupAnimation 0.5s ease;
+
+        }
+
+        /* Animation */
+
+        @keyframes popupAnimation{
+
+            from{
+                opacity:0;
+                transform:scale(0.8);
+            }
+
+            to{
+                opacity:1;
+                transform:scale(1);
+            }
+
+        }
+
+        /* Close Button */
+
+        .close{
+
+            position:absolute;
+            right:20px;
+            top:10px;
+            font-size:35px;
+            color:red;
+            cursor:pointer;
+            transition:0.3s;
+
+        }
+
+        .close:hover{
+
+            transform:rotate(90deg);
+            color:darkred;
+
+        }
+
+        /* Popup Heading */
+
+        .popup-content h2{
+
+            color:#1e3799;
+
+        }
+
+        /* Popup List */
+
+        .popup-content ul{
+
+            line-height:2;
+
+        }
+
+        /* Popup Image */
+
+        .popup-content img{
+
+            width:100%;
+            border-radius:15px;
+            margin-bottom:20px;
+
+        }
+
+        /* Project Cards */
+
+        .card{
+
+            cursor:pointer;
+            transition:0.4s;
+
+        }
+
+        .card:hover{
+
+            transform:translateY(-10px);
+
+        }
+
+        /* Mobile Responsive */
+
+        @media(max-width:768px){
+
+            .popup-content{
+
+                width:95%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <h1>
+
+        <i class="fas fa-microchip"></i>
+        PCB Learning Hub
+
+    </h1>
+
+    <p>
+
+        My Electronics & PCB Projects
+
+    </p>
+
+</header>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <a href="web1.html">
+        <i class="fas fa-home"></i>
+        Home
+    </a>
+
+    <a href="basics.html">
+        <i class="fas fa-book"></i>
+        Basics
+    </a>
+
+    <a href="tools.html">
+        <i class="fas fa-tools"></i>
+        Tools
+    </a>
+
+    <a href="project.html">
+        <i class="fas fa-project-diagram"></i>
+        Projects
+    </a>
+
+    <a href="quiz.html">
+        <i class="fas fa-question-circle"></i>
+        Quiz
+    </a>
+
+    <a href="contact.html">
+        <i class="fas fa-envelope"></i>
+        Contact
+    </a>
+
+    <a href="leaderboard.html">
+        <i class="fas fa-trophy"></i>
+        Leaderboard
+    </a>
+    <a href="trial.html">
+        <i class="fas fa-envelope"></i>
+        trial
+    </a>
+
+</nav>
+
+<!-- ================= PROJECT SECTION ================= -->
+
+<section class="section">
+
+    <h2 style="text-align:center;">
+
+        <i class="fas fa-project-diagram"></i>
+        My Projects
+
+    </h2>
+
+    <div class="container">
+
+        <!-- Staircase -->
+
+        <div class="card"
+        onclick="openPopup('stairs')">
+
+            <img src="staircase.jpg">
+
+            <h3>
+
+                <i class="fas fa-lightbulb"></i>
+                Automatic Staircase Lighting
+
+            </h3>
+
+            <p>
+
+                Sensor-based lighting automation system.
+
+            </p>
+
+        </div>
+
+        <!-- Jammer -->
+
+        <div class="card"
+        onclick="openPopup('jammer')">
+
+            <img src="jammer.jpg">
+
+            <h3>
+
+                <i class="fas fa-broadcast-tower"></i>
+                Mobile Signal Jammer
+
+            </h3>
+
+            <p>
+
+                RF communication learning project.
+
+            </p>
+
+        </div>
+
+        <!-- UART -->
+
+        <div class="card"
+        onclick="openPopup('uart')">
+
+            <img src="uart.jpg">
+
+            <h3>
+
+                <i class="fas fa-microchip"></i>
+                UART Communication
+
+            </h3>
+
+            <p>
+
+                LPC2148 serial communication project.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= POPUP ================= -->
+
+<div id="popup" class="popup">
+
+    <div class="popup-content">
+
+        <!-- Close -->
+
+        <span class="close"
+        onclick="closePopup()">
+
+            &times;
+
+        </span>
+
+        <!-- Dynamic Content -->
+
+        <div id="popupData"></div>
+
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+
+        © 2026 PCB Learning Hub |
+        Created by Ajay Raut
+
+    </p>
+
+    <a href="privacy.html"
+    style="color:white;">
+
+        Privacy Policy
+
+    </a>
+
+</footer>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+    function openPopup(project){
+
+        const popup =
+        document.getElementById("popup");
+
+        const popupData =
+        document.getElementById("popupData");
+
+        popup.style.display = "block";
+
+        let content = "";
+
+        // ================= STAIRCASE =================
+
+        if(project === "stairs"){
+
+            content = `
+
+            <img src="staircase.jpg">
+
+            <h2>
+            <i class="fas fa-lightbulb"></i>
+            Automatic Staircase Lighting
+            </h2>
+
+            <p>
+            This project automatically controls
+            staircase lights using sensors.
+            </p>
+
+            <h3>Components Used</h3>
+
+            <ul>
+
+                <li>IR Sensors</li>
+                <li>Relay Module</li>
+                <li>LED Lights</li>
+                <li>Power Supply</li>
+
+            </ul>
+
+            <h3>Working</h3>
+
+            <p>
+            Sensors detect human movement and
+            automatically switch ON/OFF lights.
+            </p>
+
+            <h3>Advantages</h3>
+
+            <ul>
+
+                <li>Energy Saving</li>
+                <li>Automatic Operation</li>
+                <li>Low Maintenance</li>
+
+            </ul>
+
+            `;
+
+        }
+
+        // ================= JAMMER =================
+
+        else if(project === "jammer"){
+
+            content = `
+
+            <img src="jammer.jpg">
+
+            <h2>
+            <i class="fas fa-broadcast-tower"></i>
+            Mobile Signal Jammer
+            </h2>
+
+            <p>
+            RF communication learning project
+            for educational purpose.
+            </p>
+
+            <h3>Components Used</h3>
+
+            <ul>
+
+                <li>RF Oscillator</li>
+                <li>Transistors</li>
+                <li>Capacitors</li>
+                <li>Antenna</li>
+
+            </ul>
+
+            <h3>Working</h3>
+
+            <p>
+            Generates RF signals to interfere
+            with communication frequencies.
+            </p>
+
+            <h3>Applications</h3>
+
+            <ul>
+
+                <li>RF Learning</li>
+                <li>Communication Study</li>
+                <li>Electronics Research</li>
+
+            </ul>
+
+            `;
+
+        }
+
+        // ================= UART =================
+
+        else if(project === "uart"){
+
+            content = `
+
+            <img src="uart.jpg">
+
+            <h2>
+            <i class="fas fa-microchip"></i>
+            UART Communication using LPC2148
+            </h2>
+
+            <p>
+            Serial communication project
+            using UART protocol.
+            </p>
+
+            <h3>Components Used</h3>
+
+            <ul>
+
+                <li>LPC2148</li>
+                <li>MAX232 IC</li>
+                <li>USB to TTL Converter</li>
+                <li>Embedded C</li>
+
+            </ul>
+
+            <h3>Working</h3>
+
+            <p>
+            UART transmits serial data using
+            TX and RX pins with baud rate setup.
+            </p>
+
+            <h3>Features</h3>
+
+            <ul>
+
+                <li>Serial Communication</li>
+                <li>Data Transmission</li>
+                <li>Terminal Communication</li>
+
+            </ul>
+
+            `;
+
+        }
+
+        popupData.innerHTML = content;
+
+    }
+
+    // ================= CLOSE POPUP =================
+
+    function closePopup(){
+
+        document.getElementById("popup")
+        .style.display = "none";
+
+    }
+
+    // ================= OUTSIDE CLICK CLOSE =================
+
+    window.onclick = function(event){
+
+        const popup =
+        document.getElementById("popup");
+
+        if(event.target == popup){
+
+            popup.style.display = "none";
+
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>PCB Quiz System</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#1e3799,#0c2461);
+    color:white;
+}
+
+header{
+    text-align:center;
+    padding:25px;
+    background:#000;
+}
+
+header h1{
+    margin:0;
+    font-size:35px;
+}
+
+header p{
+    color:#ccc;
+}
+
+nav{
+    background:#111;
+    padding:15px;
+    text-align:center;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:0 12px;
+    font-size:16px;
+    transition:0.3s;
+}
+
+nav a:hover{
+    color:#f6b93b;
+}
+
+.quiz-container{
+
+    max-width:900px;
+
+    margin:40px auto;
+
+    background:white;
+
+    color:black;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    box-shadow:0px 10px 25px rgba(0,0,0,0.4);
+
+}
+
+.quiz-container h2{
+
+    text-align:center;
+
+    color:#1e3799;
+
+    margin-bottom:20px;
+
+}
+
+.level-buttons{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+.level-buttons button{
+
+    margin:10px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#1e3799;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+}
+
+.level-buttons button:hover{
+
+    background:#0c2461;
+
+    transform:scale(1.05);
+
+}
+
+.question-box{
+
+    background:#f4f4f4;
+
+    padding:18px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    border-left:6px solid #1e3799;
+
+}
+
+.question-box p{
+
+    font-weight:bold;
+
+    color:#1e3799;
+
+    font-size:18px;
+
+}
+
+.question-box label{
+
+    display:block;
+
+    margin:10px 0;
+
+    padding:10px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+}
+
+.question-box label:hover{
+
+    background:#ddd;
+
+    transform:translateX(5px);
+
+}
+
+.question-box input{
+
+    margin-right:10px;
+
+}
+
+#submitBtn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#27ae60;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    display:none;
+
+    margin-top:20px;
+
+}
+
+#submitBtn:hover{
+
+    background:#1e8449;
+
+}
+
+#result{
+
+    margin-top:30px;
+
+    text-align:center;
+
+    background:#f4f4f4;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    font-size:22px;
+
+    color:#1e3799;
+
+}
+
+.level-title{
+
+    text-align:center;
+
+    font-size:24px;
+
+    margin-bottom:20px;
+
+    color:#1e3799;
+
+    font-weight:bold;
+
+}
+
+footer{
+
+    background:#000;
+
+    text-align:center;
+
+    padding:20px;
+
+    margin-top:40px;
+
+}
+
+footer a{
+
+    color:white;
+
+    text-decoration:none;
+
+}
+
+@media(max-width:768px){
+
+    .quiz-container{
+
+        margin:20px;
+
+        padding:20px;
+
+    }
+
+    nav a{
+
+        display:block;
+
+        margin:10px 0;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>
+<i class="fas fa-microchip"></i>
+PCB Learning Hub
+</h1>
+
+<p>
+Interactive PCB Quiz Challenge
+</p>
+
+</header>
+
+<nav>
+
+<a href="web1.html">
+<i class="fas fa-home"></i>
+Home
+</a>
+
+<a href="basics.html">
+<i class="fas fa-book"></i>
+Basics
+</a>
+
+<a href="tools.html">
+<i class="fas fa-tools"></i>
+Tools
+</a>
+
+<a href="project.html">
+<i class="fas fa-project-diagram"></i>
+Projects
+</a>
+
+<a href="quiz.html">
+<i class="fas fa-question-circle"></i>
+Quiz
+</a>
+
+<a href="leaderboard.html">
+<i class="fas fa-trophy"></i>
+Leaderboard
+</a>
+
+<a href="contact.html">
+<i class="fas fa-envelope"></i>
+Contact
+</a>
+
+</nav>
+
+<div class="quiz-container">
+
+<h2>
+
+<i class="fas fa-brain"></i>
+
+PCB Quiz Challenge
+
+</h2>
+
+<div class="level-buttons">
+
+<button onclick="startQuiz('easy')">
+
+<i class="fas fa-seedling"></i>
+
+Easy
+
+</button>
+
+<button onclick="startQuiz('medium')">
+
+<i class="fas fa-fire"></i>
+
+Medium
+
+</button>
+
+<button onclick="startQuiz('hard')">
+
+<i class="fas fa-bolt"></i>
+
+Hard
+
+</button>
+
+</div>
+
+<div class="level-title"
+id="levelTitle"></div>
+
+<form id="quizForm"></form>
+
+<button
+id="submitBtn"
+onclick="submitQuiz()">
+
+<i class="fas fa-paper-plane"></i>
+
+Submit Quiz
+
+</button>
+
+<div id="result"></div>
+
+</div>
+
+<footer>
+
+<p>
+
+© 2026 PCB Learning Hub | Created by Ajay Raut
+
+</p>
+
+<a href="privacy.html">
+
+Privacy Policy
+
+</a>
+
+</footer>
+
+<!-- FIREBASE + QUIZ SCRIPT -->
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+/* FIREBASE CONFIG */
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBMyKcUo0NtLVtcMWSl_HF59CniL2eAYDM",
+
+authDomain: "pcb-learning-hub.firebaseapp.com",
+
+projectId: "pcb-learning-hub",
+
+storageBucket: "pcb-learning-hub.firebasestorage.app",
+
+messagingSenderId: "862135822189",
+
+appId: "1:862135822189:web:d3fc5e0b66ea47ad1d1c64"
+
+};
+
+/* INITIALIZE FIREBASE */
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+/* QUIZ QUESTIONS */
+
+const quizData = {
+
+easy:[
+
+{
+question:"What does PCB stand for?",
+options:[
+"Printed Circuit Board",
+"Power Board",
+"Plastic Circuit Board",
+"Primary Board"
+],
+answer:"Printed Circuit Board"
+},
+
+{
+question:"Which software is used for PCB design?",
+options:[
+"KiCad",
+"Paint",
+"Excel",
+"Chrome"
+],
+answer:"KiCad"
+},
+
+{
+question:"Which component stores energy?",
+options:[
+"Capacitor",
+"Resistor",
+"LED",
+"Switch"
+],
+answer:"Capacitor"
+},
+
+{
+question:"PCB is used in?",
+options:[
+"Electronics",
+"Cooking",
+"Sports",
+"Painting"
+],
+answer:"Electronics"
+},
+
+{
+question:"Which device uses PCB?",
+options:[
+"Mobile Phone",
+"Book",
+"Chair",
+"Bottle"
+],
+answer:"Mobile Phone"
+},
+
+{
+question:"Resistor controls?",
+options:[
+"Current",
+"Water",
+"Light",
+"Heat"
+],
+answer:"Current"
+},
+
+{
+question:"Which layer carries tracks?",
+options:[
+"Copper Layer",
+"Plastic Layer",
+"Glass Layer",
+"Air Layer"
+],
+answer:"Copper Layer"
+},
+
+{
+question:"UART is used for?",
+options:[
+"Serial Communication",
+"Gaming",
+"Cooking",
+"Charging"
+],
+answer:"Serial Communication"
+},
+
+{
+question:"Single-layer PCB has?",
+options:[
+"One layer",
+"Two layers",
+"Five layers",
+"No layer"
+],
+answer:"One layer"
+},
+
+{
+question:"Which component allows one-way current?",
+options:[
+"Diode",
+"Battery",
+"Wire",
+"Motor"
+],
+answer:"Diode"
+}
+
+],
+
+medium:[
+
+{
+question:"What is PCB routing?",
+options:[
+"Drawing copper paths",
+"Battery charging",
+"Programming",
+"Testing"
+],
+answer:"Drawing copper paths"
+},
+
+{
+question:"Which PCB type is used in computers?",
+options:[
+"Multilayer PCB",
+"Paper PCB",
+"Wood PCB",
+"Plastic PCB"
+],
+answer:"Multilayer PCB"
+},
+
+{
+question:"Which software is professional PCB tool?",
+options:[
+"Altium Designer",
+"VLC",
+"Word",
+"YouTube"
+],
+answer:"Altium Designer"
+},
+
+{
+question:"What does IC stand for?",
+options:[
+"Integrated Circuit",
+"Internal Cable",
+"Internet Chip",
+"Input Circuit"
+],
+answer:"Integrated Circuit"
+},
+
+{
+question:"Capacitor stores?",
+options:[
+"Electrical Energy",
+"Water",
+"Code",
+"Air"
+],
+answer:"Electrical Energy"
+},
+
+{
+question:"PCB design starts with?",
+options:[
+"Schematic",
+"Gaming",
+"Testing",
+"Routing"
+],
+answer:"Schematic"
+},
+
+{
+question:"Which is open-source PCB software?",
+options:[
+"KiCad",
+"Photoshop",
+"MS Word",
+"Netflix"
+],
+answer:"KiCad"
+},
+
+{
+question:"PCB tracks are made of?",
+options:[
+"Copper",
+"Wood",
+"Plastic",
+"Rubber"
+],
+answer:"Copper"
+},
+
+{
+question:"Which component blocks AC and passes DC?",
+options:[
+"Capacitor",
+"Resistor",
+"Battery",
+"Switch"
+],
+answer:"Capacitor"
+},
+
+{
+question:"Which PCB has two copper layers?",
+options:[
+"Double Layer PCB",
+"Single PCB",
+"Paper PCB",
+"No PCB"
+],
+answer:"Double Layer PCB"
+}
+
+],
+
+hard:[
+
+{
+question:"UART communication is?",
+options:[
+"Asynchronous",
+"Mechanical",
+"Hydraulic",
+"Optical"
+],
+answer:"Asynchronous"
+},
+
+{
+question:"Which protocol uses TX and RX pins?",
+options:[
+"UART",
+"HDMI",
+"VGA",
+"USB Fan"
+],
+answer:"UART"
+},
+
+{
+question:"What is the main function of DRC in PCB?",
+options:[
+"Design Rule Check",
+"Data Rate Control",
+"Digital Routing Cable",
+"None"
+],
+answer:"Design Rule Check"
+},
+
+{
+question:"Ground plane reduces?",
+options:[
+"Noise",
+"Voltage",
+"Heat",
+"Speed"
+],
+answer:"Noise"
+},
+
+{
+question:"Which PCB is used in compact electronics?",
+options:[
+"Multilayer PCB",
+"Wood PCB",
+"Glass PCB",
+"Paper PCB"
+],
+answer:"Multilayer PCB"
+},
+
+{
+question:"LPC2148 belongs to?",
+options:[
+"ARM7",
+"8051",
+"PIC",
+"AVR"
+],
+answer:"ARM7"
+},
+
+{
+question:"UART baud rate defines?",
+options:[
+"Data transmission speed",
+"Voltage",
+"Resistance",
+"Frequency"
+],
+answer:"Data transmission speed"
+},
+
+{
+question:"Which software is mainly industry-used?",
+options:[
+"Altium Designer",
+"Paint",
+"Excel",
+"Spotify"
+],
+answer:"Altium Designer"
+},
+
+{
+question:"PCB vias connect?",
+options:[
+"Different layers",
+"Battery",
+"Speaker",
+"Display"
+],
+answer:"Different layers"
+},
+
+{
+question:"Signal integrity becomes important in?",
+options:[
+"High-speed PCB",
+"Paper PCB",
+"Simple LED",
+"Switch"
+],
+answer:"High-speed PCB"
+}
+
+]
+
+};
+
+let currentQuestions=[];
+
+let currentLevel="";
+
+/* RANDOM FUNCTION */
+
+function shuffleArray(array){
+
+return [...array].sort(() => Math.random() - 0.5);
+
+}
+
+/* START QUIZ */
+
+window.startQuiz=function(level){
+
+currentLevel=level;
+
+document.getElementById("result").innerHTML="";
+
+document.getElementById("levelTitle").innerHTML=
+
+"Selected Level : "+level.toUpperCase();
+
+const quizForm=
+document.getElementById("quizForm");
+
+quizForm.innerHTML="";
+
+currentQuestions=
+shuffleArray(quizData[level]);
+
+currentQuestions.forEach((q,index)=>{
+
+let shuffledOptions=
+shuffleArray(q.options);
+
+let optionsHTML="";
+
+shuffledOptions.forEach((option,optIndex)=>{
+
+let optionLetter=
+String.fromCharCode(65 + optIndex);
+
+optionsHTML += `
+
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${option}">
+
+<b>${optionLetter}.</b> ${option}
+
+</label>
+
+`;
+
+});
+
+quizForm.innerHTML += `
+
+<div class="question-box">
+
+<p>
+
+${index+1}. ${q.question}
+
+</p>
+
+${optionsHTML}
+
+</div>
+
+`;
+
+});
+
+document.getElementById("submitBtn")
+.style.display="block";
+
+}
+
+/* SUBMIT QUIZ */
+
+window.submitQuiz=async function(){
+
+let studentName=
+prompt("Enter Your Name");
+
+if(!studentName){
+
+alert("Please Enter Name");
+
+return;
+
+}
+
+let score=0;
+
+currentQuestions.forEach((q,index)=>{
+
+let selected=
+document.querySelector(
+`input[name="q${index}"]:checked`
+);
+
+if(selected &&
+selected.value===q.answer){
+
+score++;
+
+}
+
+});
+
+let percentage=
+(score/currentQuestions.length)*100;
+
+let message="";
+
+if(percentage>=80){
+
+message="🔥 Excellent Performance!";
+
+}
+
+else if(percentage>=50){
+
+message="👍 Good Job!";
+
+}
+
+else{
+
+message="📘 Keep Practicing!";
+
+}
+
+document.getElementById("result")
+.innerHTML=`
+
+<h2>
+
+<i class="fas fa-award"></i>
+
+</h2>
+
+<p>
+
+👨‍🎓 Student :
+${studentName}
+
+</p>
+
+<p>
+
+✅ Score :
+${score} / ${currentQuestions.length}
+
+</p>
+
+<p>
+
+🎯 Percentage :
+${percentage.toFixed(0)}%
+
+</p>
+
+<p>
+
+🧠 Level :
+${currentLevel.toUpperCase()}
+
+</p>
+
+<p>
+
+${message}
+
+</p>
+
+`;
+
+/* SAVE TO FIREBASE */
+
+try{
+
+await addDoc(
+collection(db,"leaderboard"),
+{
+
+name:studentName,
+
+score:score,
+
+percentage:percentage,
+
+level:currentLevel,
+
+createdAt:new Date()
+
+}
+);
+
+console.log("Saved Successfully");
+
+}
+
+catch(error){
+
+console.log(error);
+
+alert("Firebase Error");
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
